@@ -20,52 +20,52 @@ export async function GET(request: Request) {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#0f172a', // Deep navy/black
-            backgroundImage: 'radial-gradient(circle at 50% 10%, rgba(0, 229, 124, 0.15) 0%, #0f172a 80%)',
-            borderTop: '16px solid #00e57c', // Top border for a balanced horizontal look
+            backgroundColor: '#000000',
+            backgroundImage: 'linear-gradient(135deg, #1f1f1f 0%, #050505 100%)',
+            border: '12px solid #262626', // Sleek inner border
             fontFamily: 'sans-serif',
             padding: '40px',
+            boxSizing: 'border-box',
           }}
         >
           <div
             style={{
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'center', // Center align for balance
+              alignItems: 'center',
               justifyContent: 'center',
               width: '100%',
               maxWidth: '1000px',
-              textAlign: 'center', // Center text
-              gap: '32px',
+              textAlign: 'center',
+              gap: '40px',
             }}
           >
             <div
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                backgroundColor: 'rgba(0, 229, 124, 0.1)',
-                padding: '12px 32px',
-                borderRadius: '999px',
-                fontSize: 26,
-                color: '#00e57c', // Neon green
-                fontWeight: 800,
-                letterSpacing: '0.15em',
-                border: '1px solid rgba(0, 229, 124, 0.3)',
+                padding: '10px 32px',
+                borderRadius: '4px',
+                fontSize: 22,
+                color: '#a3a3a3', // Subtle gray
+                fontWeight: 600,
+                letterSpacing: '0.3em',
+                borderTop: '1px solid #3f3f46',
+                borderBottom: '1px solid #3f3f46',
                 marginBottom: '10px',
               }}
             >
-              PREMIUM REPORT
+              EXPERT INSIGHT
             </div>
             <div
               style={{
-                fontSize: ogTitle.length > 25 ? 60 : 76,
-                fontWeight: 900,
+                fontSize: ogTitle.length > 25 ? 56 : 72,
+                fontWeight: 800,
                 color: '#ffffff',
-                lineHeight: 1.35,
+                lineHeight: 1.4,
                 wordBreak: 'keep-all',
-                letterSpacing: '-0em',
-                textShadow: '0 8px 16px rgba(0,0,0,0.6)',
-                padding: '0 20px',
+                letterSpacing: '-0.02em',
+                padding: '0 40px',
               }}
             >
               {ogTitle}
@@ -75,18 +75,19 @@ export async function GET(request: Request) {
           <div
             style={{
               position: 'absolute',
-              bottom: '60px',
-              fontSize: 26,
-              color: '#94a3b8',
-              fontWeight: 500,
+              bottom: '50px',
+              fontSize: 22,
+              color: '#737373',
+              fontWeight: 400,
               display: 'flex',
               alignItems: 'center',
-              gap: '16px',
+              letterSpacing: '0.2em',
+              gap: '24px',
             }}
           >
-            <div style={{ width: '48px', height: '4px', backgroundColor: '#00e57c', borderRadius: '2px' }} />
-            DATA-DRIVEN SEO INSIGHTS
-            <div style={{ width: '48px', height: '4px', backgroundColor: '#00e57c', borderRadius: '2px' }} />
+            <div style={{ width: '40px', height: '1px', backgroundColor: '#525252' }} />
+            PREMIUM CURATION
+            <div style={{ width: '40px', height: '1px', backgroundColor: '#525252' }} />
           </div>
         </div>
       ),
