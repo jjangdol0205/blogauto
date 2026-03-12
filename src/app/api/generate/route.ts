@@ -66,32 +66,43 @@ export async function POST(req: Request) {
       console.error("Failed to parse translatePrompt JSON:", e);
     }
 
-    // 2. Unsplash NAPI를 통해 실제 작동하는 고화질 사진 URL 2장 가져오기 (배경용 1장 + 본문용 1장)
+    // 2. Google Custom Search API를 통해 실제 작동하는 고화질 사진 URL 2장 가져오기 (배경용 1장 + 본문용 1장)
     let imageUrls: string[] = [];
     
-    async function fetchUnsplashImages(kw: string) {
+    async function fetchGoogleImages(kw: string) {
       try {
-        const res = await fetch(`https://unsplash.com/napi/search/photos?query=${encodeURIComponent(kw)}&per_page=15&orientation=landscape`);
+        const apiKey = process.env.GOOGLE_SEARCH_API_KEY;
+        const cx = process.env.GOOGLE_SEARCH_ENGINE_ID;
+        
+        if (!apiKey || !cx) {
+          console.warn("Google Custom Search API 키 또는 검색엔진 ID가 설정되지 않았습니다. (.env.local 확인 필요)");
+          return [];
+        }
+
+        // 구글 커스텀 검색 API 호출 (searchType=image)
+        const res = await fetch(`https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&searchType=image&q=${encodeURIComponent(kw)}&num=10&safe=active`);
         if (res.ok) {
           const json = await res.json();
-          if (json.results && json.results.length >= 2) {
+          if (json.items && json.items.length >= 2) {
             // 결과 배열을 랜덤하게 섞어서 매번 다른 사진이 나오도록 함
-            const shuffled = json.results.sort(() => 0.5 - Math.random());
-            return shuffled.slice(0, 2).map((r: { urls: { regular: string } }) => r.urls.regular);
+            const shuffled = json.items.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, 2).map((item: { link: string }) => item.link);
           }
+        } else {
+          console.error("Google Custom Search API Error:", res.status, await res.text());
         }
       } catch (e) {
-        console.error("Unsplash fetch error:", e);
+        console.error("Google fetch error:", e);
       }
       return [];
     }
 
     // 1차 시도: AI가 추출한 주력 키워드로 검색
-    imageUrls = await fetchUnsplashImages(searchParams.primary);
+    imageUrls = await fetchGoogleImages(searchParams.primary);
     
     // 2차 시도: 결과가 2장 미만이면, AI가 추출한 포괄적인 fallback 키워드로 재검색 (주제 일관성 유지)
     if (imageUrls.length < 2) {
-       imageUrls = await fetchUnsplashImages(searchParams.fallback);
+       imageUrls = await fetchGoogleImages(searchParams.fallback);
     }
 
     // 3차 시도: 그래도 실패했다면 최후의 수단으로 절대 깨지지 않는 하드코딩된 고화질 이미지 2장 제공
