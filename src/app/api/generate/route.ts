@@ -1,6 +1,9 @@
 import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
 
+export const maxDuration = 60; // Increase Vercel timeout to 60 seconds
+
+
 // Initialize Gemini SDK
 // Note: You must have GEMINI_API_KEY in your .env.local file
 const ai = new GoogleGenAI({});
