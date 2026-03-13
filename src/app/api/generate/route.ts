@@ -216,7 +216,7 @@ ${personaGuidance}
    - **소제목 계층화 (필수):** 대주제와 소주제는 아래의 세련된 인라인 스타일을 정확히 복사해서 사용하세요.
      ✅ 대주제 예시: <h2 style='font-size: 24px; font-weight: 800; color: #111; margin-top: 55px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #111;'>2. 대주제 타이틀</h2>
      ✅ 소주제 예시: <h3 style='font-size: 20px; font-weight: 700; color: #333; margin-top: 35px; margin-bottom: 15px; padding-left: 14px; border-left: 4px solid #00c73c;'>2.1. 소주제 타이틀</h3>
-   - <ul>/<li> 리스트를 사용할 때도 텍스트가 촘촘하지 않게 <li style='margin-bottom: 12px; line-height: 1.6;'> 처럼 여백을 주고, 핵심 단어는 <strong style='color: #00c73c;'> 태그로 강조하세요.
+   - **리스트(List) 작성 규칙:** <ul> 태그에는 위아래 숨통을 트기 위해 반드시 <ul style='margin-top: 15px; margin-bottom: 35px; padding-left: 22px;'> 를 적용하세요. 그 안의 <li> 태그는 텍스트가 서로 붙지 않게 <li style='margin-bottom: 15px; line-height: 1.8; color: #333;'> 처럼 여백을 주고, 핵심 단어는 <strong style='color: #00c73c;'> 태그로 강조하세요.
    - **중요**: HTML 태그에 속성을 넣을 때는 큰따옴표(") 대신 **반드시 홑따옴표(')**를 사용하세요.
 
 [출력 형식 제한]
