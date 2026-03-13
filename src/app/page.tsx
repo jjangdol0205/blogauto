@@ -122,10 +122,11 @@ export default function Home() {
     }
   };
 
-  const handleSelectAllAndCopy = (elementId: string, field: string) => {
+  const handleSelectAllAndCopy = async (elementId: string, field: string) => {
     const el = document.getElementById(elementId);
     if (!el) return;
 
+    // Visual selection (so user knows what happened)
     const selection = window.getSelection();
     const range = document.createRange();
     range.selectNodeContents(el);
@@ -135,14 +136,46 @@ export default function Home() {
       selection.addRange(range);
     }
     
+    let copySuccess = false;
+
+    // 1. Try modern Async Clipboard API (highest fidelity, supports HTML in most apps)
     try {
-      document.execCommand('copy');
-      setCopiedField(field);
-      // Keep selection visible for a moment so the user knows what happened,
-      // but remove the "Copied!" message after 2 seconds
-      setTimeout(() => setCopiedField(null), 2000);
+      if (navigator.clipboard && window.ClipboardItem) {
+        // Create both HTML and Text representations to satisfy strict apps like Naver Blog
+        const html = el.innerHTML;
+        // Naive text extraction
+        const text = el.innerText || el.textContent || '';
+        
+        const htmlBlob = new Blob([html], { type: 'text/html' });
+        const textBlob = new Blob([text], { type: 'text/plain' });
+        const clipboardItem = new window.ClipboardItem({
+          'text/html': htmlBlob,
+          'text/plain': textBlob
+        });
+        
+        await navigator.clipboard.write([clipboardItem]);
+        copySuccess = true;
+      }
     } catch (err) {
-      console.error('Fallback HTML copy failed', err);
+      console.warn('Modern Clipboard API failed or not supported:', err);
+    }
+
+    // 2. Fallback to execCommand if modern API failed or was blocked
+    if (!copySuccess) {
+      try {
+        const result = document.execCommand('copy');
+        if (result) copySuccess = true;
+      } catch (err) {
+        console.error('Fallback execCommand failed:', err);
+      }
+    }
+
+    if (copySuccess) {
+      setCopiedField(field);
+      setTimeout(() => setCopiedField(null), 2000);
+    } else {
+      // If all automatic copying fails, the text stays highlighted so the user can manually copy
+      alert('자동 복사가 차단되었습니다. 파랗게 선택된 본문을 터치하여 나타나는 기본 [복사] 버튼을 직접 눌러주세요!');
     }
   };
 
