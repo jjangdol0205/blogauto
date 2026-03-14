@@ -19,7 +19,7 @@ export async function GET(request: Request) {
     if (type === 'health') {
         tagText = '노래하는 청춘 건강 연구소';
     } else if (type === 'trot') {
-        tagText = '트롯 뉴스룸 : 김기자의 취재수첩';
+        tagText = '부동산 전문가 김쌤의 현장 리포트';
     }
 
     return new ImageResponse(

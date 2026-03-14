@@ -217,7 +217,7 @@ export default function Home() {
                 >
                   <option value="선택안함">카테고리 선택</option>
                   <option value="지원금 마스터">지원금 마스터 (김쌤)</option>
-                  <option value="성수동 재개발">성수동 재개발 알리미 (김쌤)</option>
+                  <option value="부동산 전문가">부동산 전문가 (김쌤)</option>
                   <option value="은퇴 경제">은퇴 경제 (전문가)</option>
                 </select>
 
@@ -297,7 +297,7 @@ export default function Home() {
                   >
                     {blogType === 'trot' && <CheckCircle2 className="w-5 h-5 absolute top-3 right-3 text-blue-600" />}
                     <span className="text-2xl">🏗️</span>
-                    <span className={blogType === 'trot' ? 'font-bold' : ''}>성수동 재개발 알리미 (김쌤)</span>
+                    <span className={blogType === 'trot' ? 'font-bold' : ''}>부동산 전문가 (김쌤)</span>
                   </button>
                   <button
                     type="button"
