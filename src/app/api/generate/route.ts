@@ -5,7 +5,7 @@ const ai = new GoogleGenAI({});
 
 export async function POST(req: Request) {
   try {
-    const { keyword, deviceType = 'desktop' } = await req.json();
+    const { keyword, deviceType = 'desktop', goodUrl = "", badUrl = "" } = await req.json();
 
     if (!keyword) {
       return NextResponse.json({ error: "Keyword is required" }, { status: 400 });
@@ -196,9 +196,24 @@ export async function POST(req: Request) {
 ${subKeywordsText}
 `;
 
+    let feedbackLearningGuidance = "";
+    if (goodUrl || badUrl) {
+      feedbackLearningGuidance += `
+[개인화된 AI 강화 학습 지침 (매우 중요)]
+사용자가 자신의 과거 블로그 포스팅 결과를 바탕으로 다음의 피드백 링크를 제공했습니다. 구글 검색 툴을 이용해 반드시 다음 URL들의 본문 내용을 파악하고 아래 지시를 100% 따르세요.
+`;
+      if (goodUrl) {
+        feedbackLearningGuidance += `- 👍 [성공 사례 벤치마킹 필수 대상]: ${goodUrl}\n  이 글은 트래픽이 터진 '대박' 포스팅입니다. 이 글의 장점(가독성 퀄리티, 정보 배치 순서, 도입부의 공감 요소, 말투 등)을 철저히 분석하고, 이번 포스팅을 작성할 때 이 성공 패턴의 분위기와 전개 방식을 완벽하게 흡수하여 작성하세요.\n`;
+      }
+      if (badUrl) {
+        feedbackLearningGuidance += `- 👎 [실패 사례 회피 필수 대상]: ${badUrl}\n  이 글은 노출되지 않은 '폭망' 포스팅입니다. 이 글의 단점(지루한 서론, 뻔한 정보 나열, 부족한 가독성 등)을 철저히 분석하고, 이번 포스팅에서는 절대로 이 글과 같은 스타일이나 정보 전개 방식을 답습하지 마세요.\n`;
+      }
+    }
+
     const prompt = `
 ${personaGuidance}
 ${realTimeSeoGuidance}
+${feedbackLearningGuidance}
 
 사용자가 검색한 아래 키워드를 바탕으로 최상급 품질의 네이버 블로그 포스팅을 작성하세요.
 
