@@ -45,7 +45,6 @@ ${feedbackLearningGuidance}
       contents: prompt,
       config: {
         temperature: 0.8,
-        responseMimeType: "application/json",
         tools: [{ googleSearch: {} }]
       },
     });
