@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const ai = new GoogleGenAI({});
 
 export async function POST(req: Request) {
   try {
@@ -56,7 +56,7 @@ ${feedbackLearningGuidance}
       trends = parsed.trends || [];
     } catch (e) {
       console.error("Gemini JSON parse failed, text was:", response.text);
-      return NextResponse.json({ error: "AI가 트렌드를 분석하는 중 오류가 발생했습니다." }, { status: 500 });
+      return NextResponse.json({ error: `AI가 트렌드를 분석하는 중 오류가 발생했습니다: JSON 형태가 아닙니다. (${e.message})` }, { status: 500 });
     }
 
     // 네이버 검색광고 API로 정확한 트래픽(월간 검색량) 조회
@@ -103,6 +103,6 @@ ${feedbackLearningGuidance}
 
   } catch (error: any) {
     console.error("Agent Trend Error:", error);
-    return NextResponse.json({ error: "트렌드 마이닝 중 오류가 발생했습니다." }, { status: 500 });
+    return NextResponse.json({ error: `트렌드 마이닝 중 오류가 발생했습니다: ${error?.message || '알 수 없는 오류'}` }, { status: 500 });
   }
 }
