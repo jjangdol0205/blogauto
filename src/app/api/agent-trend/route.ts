@@ -54,7 +54,7 @@ ${feedbackLearningGuidance}
       const jsonStr = response.text?.replace(/```json/g, '').replace(/```/g, '').trim() || '{"trends":[]}';
       const parsed = JSON.parse(jsonStr);
       trends = parsed.trends || [];
-    } catch (e) {
+    } catch (e: any) {
       console.error("Gemini JSON parse failed, text was:", response.text);
       return NextResponse.json({ error: `AI가 트렌드를 분석하는 중 오류가 발생했습니다: JSON 형태가 아닙니다. (${e.message})` }, { status: 500 });
     }
