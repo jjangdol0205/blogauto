@@ -32,43 +32,51 @@ export async function GET(request: Request) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#38A169', // 산뜻하고 고급스러운 녹색 바탕
+            backgroundImage: 'linear-gradient(to bottom right, #7C3AED, #0EA5E9)', // 진한 보라색 -> 맑은 스카이블루 (영롱한 오로라 그라데이션)
             fontFamily: 'sans-serif',
             position: 'relative',
             overflow: 'hidden',
           }}
         >
-          {/* Background Text Pattern */}
-          <div style={{ position: 'absolute', top: '-10px', left: '40px', display: 'flex', fontSize: 130, fontWeight: 900, color: 'rgba(0, 0, 0, 0.04)', letterSpacing: '0.05em' }}>
-            BLOG POST
+          {/* Background Text Pattern - Subtle Typography */}
+          <div style={{ position: 'absolute', top: '-10px', left: '40px', display: 'flex', fontSize: 130, fontWeight: 900, color: 'rgba(255, 255, 255, 0.05)', letterSpacing: '0.05em' }}>
+            DAILY INSIGHT
           </div>
-          <div style={{ position: 'absolute', bottom: '-10px', right: '40px', display: 'flex', fontSize: 130, fontWeight: 900, color: 'rgba(0, 0, 0, 0.04)', letterSpacing: '0.05em' }}>
-            BLOG POST
+          <div style={{ position: 'absolute', bottom: '-10px', right: '40px', display: 'flex', fontSize: 130, fontWeight: 900, color: 'rgba(255, 255, 255, 0.05)', letterSpacing: '0.05em' }}>
+            TREND INFO
           </div>
 
-          {/* Inner Premium White Box */}
+          {/* Glowing Orbs behind the Glass Card */}
+          <div style={{ position: 'absolute', top: '100px', left: '150px', width: '300px', height: '300px', borderRadius: '150px', backgroundColor: '#F472B6', opacity: 0.8, filter: 'blur(50px)' }} />
+          <div style={{ position: 'absolute', bottom: '100px', right: '150px', width: '350px', height: '350px', borderRadius: '175px', backgroundColor: '#34D399', opacity: 0.6, filter: 'blur(60px)' }} />
+
+          {/* Inner Premium Glassmorphism Box */}
           <div
             style={{
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: '#FFFFFF',
+              backgroundColor: 'rgba(255, 255, 255, 0.92)', // 유리를 연상케 하는 반투명 화이트
               width: '880px',
               height: '880px',
-              borderRadius: '120px', // 매우 둥근 고급스러운 사각형
-              boxShadow: '0 40px 80px rgba(0,0,0,0.15)',
+              borderRadius: '80px', // 세련된 둥근 모서리
+              boxShadow: '0 40px 100px rgba(0,0,0,0.25)', // 깊이감 있는 그림자
+              border: '4px solid rgba(255, 255, 255, 0.5)', // 반사되는 느낌의 얇은 테두리
               position: 'relative',
               padding: '40px',
             }}
           >
-            {/* Top Hashtags */}
+            {/* Top Hashtags (Sleek Pill Shape) */}
             <div
               style={{
                 display: 'flex',
-                fontSize: 36,
-                color: '#555555',
-                fontWeight: 600,
+                fontSize: 34,
+                color: '#4F46E5', // 깊은 인디고 색상
+                backgroundColor: 'rgba(79, 70, 229, 0.08)',
+                padding: '12px 30px',
+                borderRadius: '30px',
+                fontWeight: 700,
                 marginBottom: '70px',
                 letterSpacing: '-0.02em',
               }}
@@ -76,7 +84,7 @@ export async function GET(request: Request) {
               {topTags}
             </div>
 
-            {/* Mid Huge Text (Green) */}
+            {/* Mid Huge Text (Dark Slate Navy) */}
             <div
               style={{
                 display: 'flex',
@@ -86,7 +94,7 @@ export async function GET(request: Request) {
                 wordBreak: 'keep-all',
                 fontSize: midSize,
                 fontWeight: 900,
-                color: '#2b8f58', // 텍스트 컬러 녹색
+                color: '#1E293B', // 거의 검정에 가까운 네이비 (가독성 최고)
                 lineHeight: 1.15,
                 letterSpacing: '-0.05em',
                 marginBottom: '15px',
@@ -96,7 +104,7 @@ export async function GET(request: Request) {
               {mid}
             </div>
 
-            {/* Bottom Huge Text (Black) */}
+            {/* Bottom Huge Text (Electric Blue) */}
             <div
               style={{
                 display: 'flex',
@@ -106,7 +114,7 @@ export async function GET(request: Request) {
                 wordBreak: 'keep-all',
                 fontSize: bottomSize,
                 fontWeight: 900,
-                color: '#111111',
+                color: '#2563EB', // 세련되고 눈에 띄는 블루
                 lineHeight: 1.15,
                 letterSpacing: '-0.05em',
                 marginBottom: '80px',
@@ -115,26 +123,21 @@ export async function GET(request: Request) {
             >
               {bottom}
             </div>
-            
-            {/* Small decorative text at the bottom */}
+
+            {/* Small decorative signature at the bottom */}
             <div
               style={{
                 position: 'absolute',
-                bottom: '60px',
+                bottom: '50px',
                 display: 'flex',
                 fontSize: 24,
-                color: '#aaaaaa',
+                color: '#94A3B8',
                 fontWeight: 600,
-                letterSpacing: '0.05em',
+                letterSpacing: '0.08em',
               }}
             >
               @TREND_AUTO_GENERATOR
             </div>
-
-            {/* Decorative dots in the far corners */}
-            <div style={{ position: 'absolute', display: 'flex', left: '60px', top: '100px', width: '36px', height: '36px', borderRadius: '18px', backgroundColor: '#fde047', opacity: 0.8 }} />
-            <div style={{ position: 'absolute', display: 'flex', right: '80px', bottom: '140px', width: '44px', height: '44px', borderRadius: '22px', backgroundColor: '#ef4444', opacity: 0.8 }} />
-            <div style={{ position: 'absolute', display: 'flex', right: '110px', top: '120px', width: '20px', height: '20px', borderRadius: '10px', backgroundColor: '#3b82f6', opacity: 0.8 }} />
           </div>
         </div>
       ),
