@@ -10,45 +10,27 @@ export async function POST(req: Request) {
   try {
     let body: any = {};
     try { body = await req.json(); } catch(e) {}
-    const { goodUrl, badUrl, bannedKeywords = [] } = body;
-
-    let feedbackLearningGuidance = "";
-    if (goodUrl || badUrl) {
-      feedbackLearningGuidance += `
-[개인화된 맞춤형 타겟팅 지침]
-사용자가 과거 작성한 블로그 피드백 주소입니다. 이 블로그의 톤앤매너와 주요 주제(니치)를 분석하고, 사용자의 전문 분야에 맞는 트렌드 키워드를 발굴하세요.
-`;
-      if (goodUrl) feedbackLearningGuidance += `- 성공 사례(이 분야 위주로 발굴): ${goodUrl}\n`;
-      if (badUrl) feedbackLearningGuidance += `- 실패 사례(이 분야와 유사한 포괄적 키워드는 배제): ${badUrl}\n`;
-    }
+    const { bannedKeywords = [] } = body;
     const bannedSection = bannedKeywords.length > 0 
       ? `\n[절대 금지 키워드 (이미 과거에 3번 이상 추출됨)]\n아래 키워드들은 절대로 다시 제안하지 마세요: ${bannedKeywords.join(', ')}\n` 
       : "";
 
     const prompt = `
-당신은 대한민국 상위 0.1% 네이버 블로그 트래픽 마스터(SEO 전문가)입니다.
-현재 구글 검색(Google Search)을 실시간으로 적극 활용하여, 오늘 날짜 기준으로 네이버 블로그 생태계에서 매우 뜨거운 관심을 받고 있지만 아직 초대형 인플루언서들이 꽉 잡고 있지 않은 **'틈새(니치) 황금 롱테일 키워드' 딱 3개**를 발굴해내세요.
-${bannedSection}
-
-${feedbackLearningGuidance}
-
-[상위노출 벤치마킹 데이터 (필수 참고)]
-최근 조회수가 폭발한 실제 상위노출 블로그들을 분석한 결과, 다음과 같은 키워드들이 압도적인 유입을 만들었습니다:
-- "2026 민생지원금", "4차 민생지원금", "민생지원금 신청방법" (최신 정책/지원금 이슈)
-- "CMA 금리비교", "파킹통장 추천" (금융/재테크 실생활 혜택 비교)
-- "통합돌봄 서비스", "부모님 노인돌봄" (생활/복지/사회적 이슈)
+당신은 대한민국 상위 0.1% 경제/국제 비즈니스 전문 블로거입니다.
+현재 구글 검색(Google Search)을 실시간으로 적극 활용하여, 오늘 날짜 기준으로 **월스트리트저널(Wall Street Journal)**과 **블룸버그(Bloomberg)**에서 보도된 최신 경제 및 국제 뉴스 타겟 트렌드를 분석하세요.
 
 [키워드 발굴 절대 원칙]
-1. (절대 금지): '비트코인', '장외주식', '맛집', '여자트로트가수' 같은 뻔하고 넓은 메가 키워드.
-2. (강력 권장): 위 벤치마킹 데이터처럼 구체적인 정책명, 지원금, 실생활 혜택(신청방법, 자격, 비교) 등이 포함된 5글자 이상의 롱테일 키워드. (예: "2026 정부지원금 숨은 혜택", "카카오뱅크 파킹통장 이자 비교")
-3. 실시간으로 사람들이 가장 불안해하거나 당장 신청/가입하지 않으면 손해를 볼 것 같은 경제/정책/복지/금융 이슈 위주로 적극 발굴하세요.
+1. 단순한 대형 키워드(예: '미국증시', '환율') 대신, 구체적인 틈새 황금 롱테일 키워드 3개를 추출하세요. (예: "미국 연준 금리인하시기", "미국 채권 ETF 비교", "블랙웰 수혜주", "엔비디아 실적발표 시간")
+2. 직장인, 개인투자자 등 경제에 관심이 많은 한국 독자들이 당장 클릭해서 읽고 싶을 만큼 매력적이고 구체적인 인사이트를 제공해야 합니다.
+3. 가장 최신(오늘 또는 어제) 화제가 된 뉴스, 실적 발표, 거시경제 지표 등을 기반으로 하세요.
+${bannedSection}
 
 반드시 아래 JSON 형식으로만 응답하세요. 백틱(\`\`\`)이나 다른 설명은 절대 추가하지 마세요.
 {
   "trends": [
     {
       "keyword": "발굴한 롱테일 키워드",
-      "reason": "왜 이 키워드가 지금 트래픽을 당길 수 있는 황금 빈집인지에 대한 아주 짧은 분석 (1~2문장)"
+      "reason": "왜 이 경제/국제 이슈가 현재 한국 투자자들이나 경제 관심층에게 뜨거운 주제인지 아주 짧은 분석 (1~2문장)"
     }
   ]
 }
@@ -69,12 +51,11 @@ ${feedbackLearningGuidance}
       const parsed = JSON.parse(jsonStr);
       trends = parsed.trends || [];
       
-      // 개수 제한 (만약 3개 이상이면 자름)
       trends = trends.slice(0, 3);
       
     } catch (e: any) {
       console.error("Gemini JSON parse failed, text was:", response.text);
-      return NextResponse.json({ error: `AI가 트렌드를 분석하는 중 오류가 발생했습니다: JSON 형태가 아닙니다. (${e.message})` }, { status: 500 });
+      return NextResponse.json({ error: `AI가 금융/국제 트렌드를 분석하는 중 오류가 발생했습니다: JSON 형태가 아닙니다. (${e.message})` }, { status: 500 });
     }
 
     // 네이버 검색광고 API로 정확한 트래픽(월간 검색량) 조회
@@ -120,7 +101,7 @@ ${feedbackLearningGuidance}
     return NextResponse.json({ trends });
 
   } catch (error: any) {
-    console.error("Agent Trend Error:", error);
-    return NextResponse.json({ error: `트렌드 마이닝 중 오류가 발생했습니다: ${error?.message || '알 수 없는 오류'}` }, { status: 500 });
+    console.error("Agent Finance Error:", error);
+    return NextResponse.json({ error: `금융 트렌드 마이닝 중 오류가 발생했습니다: ${error?.message || '알 수 없는 오류'}` }, { status: 500 });
   }
 }
