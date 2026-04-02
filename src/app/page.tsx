@@ -452,22 +452,7 @@ export default function Home() {
                       />
                     </div>
                   </div>
-                )}/div>
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="keyword" className="block text-sm font-semibold">
-                    직접 작성할 키워드 입력 <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    id="keyword"
-                    type="text"
-                    value={keyword}
-                    onChange={(e) => setKeyword(e.target.value)}
-                    placeholder="직접 작성하고 싶은 특정 키워드가 있다면 입력하세요."
-                    className="w-full px-4 py-3 rounded-md border border-gray-300 focus:border-[#00c73c] focus:ring-1 focus:ring-[#00c73c] outline-none transition-all"
-                  />
-                </div>
+                )}
 
               </div>
 
