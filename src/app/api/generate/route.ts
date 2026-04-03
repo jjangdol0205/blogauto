@@ -9,6 +9,30 @@ export async function POST(req: Request) {
   try {
     const { keyword, deviceType = 'desktop', category = 'general', goodUrl = "", badUrl = "" } = await req.json();
 
+    let parsedKeyword = keyword;
+    let smartStoreHint = "";
+
+    if (category === 'brandconnect' && keyword.includes('http')) {
+       try {
+          const res = await fetch(keyword, { redirect: 'manual' });
+          let finalUrl = keyword;
+          if ([301, 302, 307].includes(res.status)) {
+             finalUrl = res.headers.get('location') || finalUrl;
+          } else {
+             finalUrl = res.url;
+          }
+          if (finalUrl.includes('brandconnect.naver.com')) {
+             const urlObj = new URL(finalUrl);
+             const productNo = urlObj.searchParams.get('channelProductNo');
+             if (productNo) {
+                smartStoreHint = `\n[중요 단서] 입력된 링크에서 추출한 스마트스토어 상품번호는 '${productNo}' 입니다. 반드시 구글 검색 도구(googleSearch)를 사용하여 '네이버 스마트스토어 상품번호 ${productNo}' 혹은 '네이버 쇼핑 ${productNo}'로 검색하여 상품의 정확한 이름, 브랜드, 특징을 알아내세요.`;
+             }
+          }
+       } catch (e) {
+          console.error("BrandConnect link resolve failed:", e);
+       }
+    }
+
     if (!keyword) {
       return NextResponse.json({ error: "Keyword is required" }, { status: 400 });
     }
@@ -138,7 +162,9 @@ export async function POST(req: Request) {
     if (category === 'brandconnect') {
       personaGuidance = `
 당신은 대한민국 5060 시니어들에게 "내 돈 주고 사긴 아깝고 남이 사주면 좋은 물건", "살면서 꼭 필요한 프리미엄 가성비템"을 족집게처럼 골라주는 '가성비 꿀템 리뷰어 (김쌤)'입니다.
-이 블로그의 모토는 "광고인듯 광고아닌, 진짜 우리 삶의 질을 높여주는 유용한 정보" 입니다. 주어진 상품명과 소구포인트를 바탕으로 구매율(전환율)이 폭발하는 네이버 브랜드 커넥트 제휴 마케팅 글을 작성해주세요.
+이 블로그의 모토는 "광고인듯 광고아닌, 진짜 우리 삶의 질을 높여주는 유용한 정보" 입니다. 
+사용자가 제휴사(브랜드 커넥트) 링크 하나만 입력했습니다. 주어진 단서를 바탕으로 검색 도구(googleSearch)를 적극 활용해 이 링크가 가리키는 실제 상품이 무엇인지 파악하고, 구매율(전환율)이 폭발하는 네이버 브랜드 커넥트 제휴 마케팅 글을 작성해주세요.
+${smartStoreHint}
 
 [🔥 구매 전환율 300% 달성 필수 프롬프트 🔥]
 
@@ -148,13 +174,13 @@ export async function POST(req: Request) {
    
 2. 정보 70%, 추천 30% 황금비율 (스토리텔링):
    - 해당 상품이 필요한 이유에 대한 유용한 '건강상식'이나 '생활꿀팁' (정보)을 전반부에 배치하세요. 
-   - 중반부부터 "그래서 제가 각종 커뮤니티 평점과 원료를 모두 깐깐하게 비교해보고 딱 고른 게 바로 이 제품입니다."라며 자연스럽게 상품을 등장시킵니다.
-   - 입력받은 소구점(장점)을 나열식이 아닌 "이래서 우리한테 꼭 필요하고 돈값을 합니다"라는 확신에 찬 어조로 풀이하세요.
+   - 중반부부터 "그래서 제가 각종 커뮤니티 평점과 원료를 모두 깐깐하게 비교해보고 딱 고른 게 바로 이 제품입니다."라며 자연스럽게 알아낸 상품명을 등장시킵니다.
+   - 검색을 통해 파악한 상품의 장점이나 상세 정보를 나열식이 아닌 "이래서 우리한테 꼭 필요하고 돈값을 합니다"라는 확신에 찬 어조로 풀이하세요.
    - 각 문단마다 📌 기호를 사용해 넘버링 소제목을 달아주세요.
 
 3. 직관적인 Call to Action (구매 행동 유도):
    - 본문 중간과 결론부에 시각적으로 뚜렷한 구매 링크를 만드세요.
-   - \`👉 [혜택가 및 상세 정보 확인하기 (링크)]\` 처럼 안내한 뒤, 입력된 "제휴링크"를 반드시 본문에 포함하여 독자가 클릭하게 하세요.
+   - \`👉 [혜택가 및 상세 정보 확인하기 (링크)]\` 처럼 안내한 뒤, 사용자가 입력한 "제휴링크"를 반드시 그대로 본문에 포함하여 독자가 클릭하게 하세요.
    - "이벤트 혜택이 언제 종료될지 모르니 일단 확인부터 해보세요!" 처럼 조급함을 살짝 유도하세요.
 
 4. [🚨 법적 필수 규칙 (공정위 문구) 🚨]

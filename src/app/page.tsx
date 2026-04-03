@@ -5,8 +5,6 @@ import { Sparkles, Copy, CheckCircle2, PenTool, Loader2, AlertCircle, Lightbulb,
 
 export default function Home() {
   const [keyword, setKeyword] = useState("");
-  const [bcTitle, setBcTitle] = useState("");
-  const [bcPoints, setBcPoints] = useState("");
   const [bcLink, setBcLink] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -80,11 +78,11 @@ export default function Home() {
     let currentKeyword = overrideKeyword || keyword;
     
     if (category === 'brandconnect') {
-      if (!bcTitle.trim() || !bcLink.trim()) {
-        setErrorMsg("네이버 브랜드 커넥트: 상품명과 제휴 링크를 반드시 입력해주세요.");
+      if (!bcLink.trim()) {
+        setErrorMsg("네이버 브랜드 커넥트: 제휴 링크(naver.me)를 반드시 입력해주세요.");
         return;
       }
-      currentKeyword = `상품명: ${bcTitle}\n소구포인트: ${bcPoints}\n제휴링크: ${bcLink}`;
+      currentKeyword = bcLink.trim();
     } else {
       if (!currentKeyword.trim()) return;
     }
@@ -419,35 +417,18 @@ export default function Home() {
                 ) : (
                   <div className="mt-6 bg-orange-50 p-6 rounded-2xl border border-orange-200 shadow-sm animate-fade-in space-y-4">
                     <h3 className="text-lg font-bold text-orange-900 mb-4 flex items-center gap-2">
-                      💸 네이버 브랜드 커넥트 필수 정보 입력
+                      💸 네이버 브랜드 커넥트 자동화 봇
                     </h3>
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-orange-900">상품명 <span className="text-red-500">*</span></label>
-                      <input
-                        type="text"
-                        value={bcTitle}
-                        onChange={(e) => setBcTitle(e.target.value)}
-                        placeholder="예: 코지마 목어깨 안마기"
-                        className="w-full px-4 py-3 rounded-md border border-orange-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none transition-all"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-orange-900">소구포인트 (옵션)</label>
-                      <input
-                        type="text"
-                        value={bcPoints}
-                        onChange={(e) => setBcPoints(e.target.value)}
-                        placeholder="예: 부모님 명절선물 강력추천, 1+1 행사"
-                        className="w-full px-4 py-3 rounded-md border border-orange-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none transition-all"
-                      />
-                    </div>
+                    <p className="text-sm text-orange-800 mb-2">
+                      상품명이나 특징을 입력할 필요 없이 제휴 링크(naver.me)만 붙여넣으면, AI가 알아서 상품정보를 분석하여 고수익 마케팅 글을 작성합니다.
+                    </p>
                     <div className="space-y-2">
                       <label className="block text-sm font-semibold text-orange-900">제휴 링크 <span className="text-red-500">*</span></label>
                       <input
                         type="text"
                         value={bcLink}
                         onChange={(e) => setBcLink(e.target.value)}
-                        placeholder="스마트폰 화면에서 브랜드 커넥트 제휴 링크를 복사해 붙여넣으세요"
+                        placeholder="예: https://naver.me/..."
                         className="w-full px-4 py-3 rounded-md border border-orange-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none transition-all"
                       />
                     </div>
