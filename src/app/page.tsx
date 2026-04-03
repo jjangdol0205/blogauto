@@ -5,6 +5,7 @@ import { Sparkles, Copy, CheckCircle2, PenTool, Loader2, AlertCircle, Lightbulb,
 
 export default function Home() {
   const [keyword, setKeyword] = useState("");
+  const [bcTitle, setBcTitle] = useState("");
   const [bcLink, setBcLink] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -78,11 +79,11 @@ export default function Home() {
     let currentKeyword = overrideKeyword || keyword;
     
     if (category === 'brandconnect') {
-      if (!bcLink.trim()) {
-        setErrorMsg("네이버 브랜드 커넥트: 제휴 링크(naver.me)를 반드시 입력해주세요.");
+      if (!bcTitle.trim() || !bcLink.trim()) {
+        setErrorMsg("네이버 브랜드 커넥트: 상품명과 제휴 링크를 반드시 입력해주세요.");
         return;
       }
-      currentKeyword = bcLink.trim();
+      currentKeyword = `상품명: ${bcTitle}\n제휴링크: ${bcLink}`;
     } else {
       if (!currentKeyword.trim()) return;
     }
@@ -419,18 +420,31 @@ export default function Home() {
                     <h3 className="text-lg font-bold text-orange-900 mb-4 flex items-center gap-2">
                       💸 네이버 브랜드 커넥트 자동화 봇
                     </h3>
-                    <p className="text-sm text-orange-800 mb-2">
-                      상품명이나 특징을 입력할 필요 없이 제휴 링크(naver.me)만 붙여넣으면, AI가 알아서 상품정보를 분석하여 고수익 마케팅 글을 작성합니다.
+                    <p className="text-sm text-orange-800 mb-4">
+                      🚨 <span className="font-bold">네이버 보안 정책상 링크만으로는 AI가 내역을 볼 수 없습니다!</span><br/>
+                      진짜 번거로우시겠지만 <b>상품명</b>만 짧게 적어주시면, AI가 알아서 검색해보고 기가 막힌 홍보글을 써줍니다!
                     </p>
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-orange-900">제휴 링크 <span className="text-red-500">*</span></label>
-                      <input
-                        type="text"
-                        value={bcLink}
-                        onChange={(e) => setBcLink(e.target.value)}
-                        placeholder="예: https://naver.me/..."
-                        className="w-full px-4 py-3 rounded-md border border-orange-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none transition-all"
-                      />
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-semibold text-orange-900 mb-1">어떤 상품인가요? (상품명) <span className="text-red-500">*</span></label>
+                        <input
+                          type="text"
+                          value={bcTitle}
+                          onChange={(e) => setBcTitle(e.target.value)}
+                          placeholder="예: 코지마 목어깨 안마기 (대충이라도 꼭 적어주세요!)"
+                          className="w-full px-4 py-3 rounded-md border border-orange-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none transition-all"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-orange-900 mb-1">제휴 링크 <span className="text-red-500">*</span></label>
+                        <input
+                          type="text"
+                          value={bcLink}
+                          onChange={(e) => setBcLink(e.target.value)}
+                          placeholder="예: https://naver.me/..."
+                          className="w-full px-4 py-3 rounded-md border border-orange-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none transition-all"
+                        />
+                      </div>
                     </div>
                   </div>
                 )}
