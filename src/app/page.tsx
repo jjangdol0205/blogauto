@@ -21,6 +21,7 @@ export default function Home() {
   const [aiTrends, setAiTrends] = useState<any[]>([]);
   const [isTrendLoading, setIsTrendLoading] = useState(false);
   const [activeBlogStyle, setActiveBlogStyle] = useState('blog1');
+  const [trendCoreKeyword, setTrendCoreKeyword] = useState("");
 
   const LOCAL_STORAGE_KEY = 'autoblog_keyword_history';
 
@@ -57,7 +58,7 @@ export default function Home() {
       const res = await fetch('/api/agent-trend', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ bannedKeywords }),
+        body: JSON.stringify({ bannedKeywords, style, coreKeyword: trendCoreKeyword }),
       });
       const data = await res.json();
       if (res.ok && data.trends) {
@@ -349,6 +350,22 @@ export default function Home() {
             <form onSubmit={handleGenerate} className="space-y-6">
               <div className="space-y-4">
                 
+                {/* 핵심 키워드 입력 */}
+                <div className="space-y-2 mb-2">
+                  <label htmlFor="trendCoreKeyword" className="block text-sm font-semibold">
+                    트렌드 추출용 핵심 키워드 <span className="text-gray-400 font-normal">(선택)</span>
+                  </label>
+                  <input
+                    id="trendCoreKeyword"
+                    type="text"
+                    value={trendCoreKeyword}
+                    onChange={(e) => setTrendCoreKeyword(e.target.value)}
+                    placeholder="예: 60대 비즈니스 경제"
+                    className="w-full px-4 py-3 rounded-md border border-gray-300 focus:border-[#00c73c] focus:ring-1 focus:ring-[#00c73c] outline-none transition-all"
+                  />
+                  <p className="text-xs text-gray-500">두 번째 블로그 추출 시 위 키워드를 기반으로 연관 롱테일을 찾아옵니다.</p>
+                </div>
+
                 {/* 3 Blog Modes */}
                 <div className="flex flex-col gap-3">
                   <button
