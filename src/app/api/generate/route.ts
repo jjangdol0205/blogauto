@@ -108,7 +108,7 @@ export async function POST(req: Request) {
     
     let searchParams = { primary: "사무실", fallback: "비즈니스", englishSubject: "office desktop", thumbnailTop: "오늘의 핵심 정보", thumbnailMid: keyword || "핵심 요약", thumbnailBottom: "지금 바로 확인!" };
     try {
-      const jsonStr = transRes.text?.trim() || "{}";
+      const jsonStr = transRes?.text?.trim() || "{}";
       const cleanedJsonStr = jsonStr.replace(/```json/g, '').replace(/```/g, '').trim();
       searchParams = JSON.parse(cleanedJsonStr);
     } catch (e) {
@@ -343,7 +343,7 @@ ${deviceType === 'mobile' ? "(생성된 블로그 본문을 <p>, <br>, <b> 태�
       ]
     };
 
-    let streamRes;
+    let streamRes: any;
     const generateModels = ["gemini-2.5-pro", "gemini-pro-latest", "gemini-flash-latest"];
     let genAttempt = 0;
 
